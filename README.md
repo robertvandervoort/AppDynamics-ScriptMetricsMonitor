@@ -1,5 +1,3 @@
-Absolutely! Here's the fixed Markdown with the code block working properly:
-
 # AppDynamics-ScriptMetricsMonitor
 
 A machine agent extension that can run any number of monitoring scripts and handle various output formats
