@@ -32,14 +32,14 @@ Custom Metrics|cpu-extended|syscalls,value=192581
 ```
 
 ### Windows
-'''
+```
 Error processing job 'testmetrics': [WinError 193] %1 is not a valid Win32 application
 Error processing job 'testmetrics': [WinError 193] %1 is not a valid Win32 application
 Custom Metrics|cpu-extended|ctx_switches,value=1638559682
 Custom Metrics|cpu-extended|interrupts,value=460127880
 Custom Metrics|cpu-extended|soft_interrupts,value=0
 Custom Metrics|cpu-extended|syscalls,value=402143940
-'''
+```
 
 The errors here are because the first two test scripts are bash shell scripts so you can ignore those.
 
