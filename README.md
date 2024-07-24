@@ -40,6 +40,7 @@ Custom Metrics|cpu-extended|interrupts,value=460127880
 Custom Metrics|cpu-extended|soft_interrupts,value=0
 Custom Metrics|cpu-extended|syscalls,value=402143940
 '''
+
 The errors here are because the first two test scripts are bash shell scripts so you can ignore those.
 
 If you dont see the "cpu-extended" (last four lines), then the Python sample monitor (a perfectly useful monitor I would add) is not executing. This is likely due to a missing dependency. Make sure you installed the requirements in the prior steps. The test script requires the `psutil` library. This library will be common for Python-based monitoring scripts, so I made it a requirement in the venv.
