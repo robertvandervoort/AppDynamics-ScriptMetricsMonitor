@@ -1,0 +1,34 @@
+# Optional: Global default metric path (used if not specified per job)
+metric_path: "Custom Metrics|ScriptMetrics" 
+
+jobs:
+  - name: "testmetrics"
+    script: "scripts/testmetrics.sh"
+    output_format: "keyvalue" # Options: json, xml, keyvalue, key=value
+    metric_path: "Custom Metrics"   # Job-specific metric path
+    metrics: # Optional metric renaming
+      - original_name: "my_key"
+        metric_name: "CustomMetricName"
+
+  - name: "testmetrics"
+    script: "scripts/testmetrics2.sh"
+    output_format: "key=value" # Options: json, xml, keyvalue, key=value
+    metric_path: "Custom Metrics"   # Job-specific metric path 
+    metrics: # Optional metric renaming
+      - original_name: "my_key"
+        metric_name: "CustomMetricName"
+
+  - name: "cpu-extended"
+    script: "scripts/cpu-extended.py"
+    output_format: "json" # Options: json, xml, keyvalue, key=value
+    metric_path: "Custom Metrics"   # Job-specific metric path    
+    metrics: # Optional metric renaming
+      - original_name: "my_key"
+        metric_name: "CustomMetricName"
+
+#  - name: "Job2"
+#    script: "scripts/script2.sh"
+#    output_format: "json"
+#    metrics: # Optional metric renaming
+#      - original_name: "my_key"
+#        metric_name: "CustomMetricName"
