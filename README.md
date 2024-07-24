@@ -4,7 +4,7 @@ A machine agent extension that can run any number of monitoring scripts and hand
 
 ## Getting Started
 
-**All operating systems**
+### All OS
 
 1. Clone this repo into your machine agent's "monitors" folder.
 
