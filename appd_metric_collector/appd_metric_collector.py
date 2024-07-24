@@ -5,7 +5,7 @@ class AppDMetricCollector:
 
     def collect_metrics(self, metric_path, job_name, metrics_dict):
         for key, value in metrics_dict.items():
-            self.metrics.append(f"{metric_path}|{job_name}|{key},value={value}")
+            self.metrics.append(f"name={metric_path}|{job_name}|{key}, value={value}")
 
     def get_metric_string(self):
         return "\n".join(self.metrics)
