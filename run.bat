@@ -34,7 +34,7 @@ if not exist "venv" (
         echo All requirements are already installed.
     ) else (
         echo Installing missing requirements from requirements.txt...
-        python -m pip install -r "%REQUIREMENTS_FILE" --disable-pip-version-check
+        python -m pip install -r requirements.txt --disable-pip-version-check
 
         if errorlevel 1 (
             echo Failed to install requirements. Exiting.
