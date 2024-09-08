@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import psutil
 import json
+import psutil
 
 def get_cpu_stats_json():
     """Retrieves CPU stats and formats them as JSON."""

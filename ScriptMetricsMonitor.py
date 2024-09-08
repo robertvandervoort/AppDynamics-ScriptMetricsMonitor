@@ -1,13 +1,17 @@
+#! python
+
+import os
 import sys
 import contextlib
-import yaml
+import xml.etree.ElementTree as ET
 import subprocess
 import json
-import xml.etree.ElementTree as ET
+import yaml
 from appd_metric_collector.appd_metric_collector import AppDMetricCollector
 
 def main():
-    # 1. Read Configuration (using PyYAML or similar)
+    """Main program code"""
+    #1. Read Config"""
     with open("config.yml", 'r') as f:
         config = yaml.safe_load(f)
 
@@ -18,16 +22,29 @@ def main():
     for job in config['jobs']:
         try:
             # 3.1 Execute Script
-            script_path = job['script']
+            script_path = repr(job['script'])[1:-1]  # Convert to raw string
+            script_path = os.path.normpath(script_path)
+
             if script_path.endswith('.py'):
                 if sys.version_info >= (3, 7):  # Python 3.7+
-                    result = subprocess.run(['python', script_path], capture_output=True, text=True, bufsize=0)
+                    result = subprocess.run(['python', script_path], capture_output=True, text=True, bufsize=0, check=False)
                 else:
                     with contextlib.closing(subprocess.Popen(['python', script_path], stdout=subprocess.PIPE, bufsize=0)) as proc:
                         result = proc.stdout.read().decode()
+            
+            elif script_path.endswith('.exe'): #for .exe progs
+                try:
+                    result = subprocess.check_output([script_path, "-q", "-x"], universal_newlines=True)
+                except subprocess.CalledProcessError as e:
+                    print("Error executing command:", e)
+                    result = None
+            
+            #elif script_path.endswith(('.cmd', '.bat')):  # Handle .cmd and .bat files
+            #    result = subprocess.run([script_path], shell=True, capture_output=True, text=True, bufsize=0, check=False)
+
             else:
                 if sys.version_info >= (3, 7):  # Python 3.7+
-                    result = subprocess.run([script_path], capture_output=True, text=True, bufsize=0)
+                    result = subprocess.run([script_path], capture_output=True, text=True, bufsize=0, check=False)
                 else:
                     with contextlib.closing(subprocess.Popen([script_path], stdout=subprocess.PIPE, bufsize=0)) as proc:
                         result = proc.stdout.read().decode()

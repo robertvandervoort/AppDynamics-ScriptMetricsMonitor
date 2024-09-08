@@ -14,8 +14,8 @@
         </task-arguments>
         <executable-task>
             <type>file</type>
-            <file os-type="linux">ScriptMetricsMonitor.py</file>
-            <file os-type="windows">ScriptMetricsMonitor.py</file>
+            <file os-type="linux">run.sh</file>
+            <file os-type="windows">run.cmd</file>
         </executable-task>
     </monitor-run-task>
 </monitor>

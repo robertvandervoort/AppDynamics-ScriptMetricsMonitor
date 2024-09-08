@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 VENV_DIR="venv"
 REQUIREMENTS_FILE="requirements.txt"
