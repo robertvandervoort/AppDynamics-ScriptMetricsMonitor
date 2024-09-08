@@ -39,8 +39,8 @@ def main():
                     print("Error executing command:", e)
                     result = None
             
-            #elif script_path.endswith(('.cmd', '.bat')):  # Handle .cmd and .bat files
-            #    result = subprocess.run([script_path], shell=True, capture_output=True, text=True, bufsize=0, check=False)
+            elif script_path.endswith(('.cmd', '.bat')):  # Handle .cmd and .bat files
+                result = subprocess.run([script_path], shell=True, capture_output=True, text=True, bufsize=0, check=False)
 
             else:
                 if sys.version_info >= (3, 7):  # Python 3.7+
