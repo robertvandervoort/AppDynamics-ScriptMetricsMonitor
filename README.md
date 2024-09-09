@@ -78,12 +78,18 @@ jobs:
       - original_name: "my_key"
         metric_name: "CustomMetricName"
 ```
+
 `metric_path` in the very top level of the yaml: This is used if you don't specify the path in the job. This follows AppD's standard and just places any custommetric underneath the entity (server) in the Custom Metrics path in the metric browser.
+
 `jobs:` contains all the jobs! Each job is defined below.
+
 `name:` This field defines the job name and will serve as the next path segment for the metric. In the example given that would be `Custom Metrics | testmetrics` An important note here is that job names DO NOT HAVE TO BE UNIQUE. Since the purpose it serves is to create the path segment, you can use the same job name for several jobs. This keeps those metrics together in the same segment. There are lots of reason you'd want to do this and I do so in the exmaples.
+
 `script:` The path to the script you want to execute. In the example I'm using a relative path because the scripts sit in the monitoring scripts folder in a folder called scripts. You can put absolute paths here or move your mointoring scripts into the scripts folder. Whatever works. Generally I recommend keeping them in another location in the case where you might upgrade the machine agent and the folder gets wiped our, that would be unfortunate!
+
 `output_format:` Options are `json`, `xml`, `keyvalue`, `key=value`
    json - we expect a single level of json currently. The output should be similar to the sample python monitoring script `cpu-extended.py`
+   
    ```   
       {
           "ctx_switches": 3529,
@@ -92,12 +98,14 @@ jobs:
           "syscalls": 178295
       }
    ```
+
 `metric_path:` Here it is again! This will override the global default above and is generally how I'd recommend you proceed. This sets the base path of your metrics. In my example above, these are really CPU metrics around context switches and if I wanted to see those in the CPU metrics I would set the path to `Hardware Resources` and the job name to `CPU`.
+
 `metrics:` This section does metric renaming. This is a convenience factor for some and need for others. If you wrote your monitoring scripts of course you can go change the metric names in your code. If someone else wrote them or you have no access to change them, this comes in super handy.
    `- original_name: "my_key"` The metric name in the output of the script in question to match on.
      `metric_name: "CustomMetricName"` The new name for the metric that we matched above.
 
 And that's it. Just add another section like this for each script you want this monitor to run. 
 
-##Notes
+## Notes
 I have included two python scripts in this repo. one is `AsyncScriptMetricsMonitor.py` which runs all the jobs at once. This ensures consistency in timestamping of the data since all run at the same time. This is the latest iteration of the code and the one that the monitor.xml is configured to use. I have also included `ScriptMetricsMonitor.py` which is the first iteration of the script. It runs jobs consecutively. There may be reasons you wish to do this. Perhaps a script you have requires another script to have run beforehand in order for some data to be available. That's ok! You can hava a jab that gets run and has no output for the sake of metrics. If you need scripts to run in a specific order, use this one.
