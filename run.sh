@@ -3,6 +3,21 @@
 VENV_DIR="venv"
 REQUIREMENTS_FILE="requirements.txt"
 
+# Function to find the Python 3 executable
+get_"$PYTHON3"() {
+    for executable in "$PYTHON3" python; do
+        if command -v "$executable" >/dev/null 2>&1 && "$executable" --version 2>&1 | grep -q "Python 3"; then
+            echo "$executable"
+            return
+        fi
+    done
+    echo "Error: No suitable Python 3 executable found." >&2
+    exit 1
+}
+
+# Find the Python 3 executable
+"$PYTHON3"="$(get_"$PYTHON3")"
+
 # Check if virtual environment exists
 if [ -d "$VENV_DIR" ]; then
     # Determine the shell type
@@ -26,9 +41,9 @@ if [ -d "$VENV_DIR" ]; then
     esac
 
     # Check if requirements are already installed (redirecting stderr to /dev/null)
-    if ! python3 -m pip list --format=freeze --disable-pip-version-check 2>/dev/null | grep -q -F -f "$REQUIREMENTS_FILE"; then 
+    if ! "$PYTHON3" -m pip list --format=freeze --disable-pip-version-check 2>/dev/null | grep -q -F -f "$REQUIREMENTS_FILE"; then 
         echo "Installing missing requirements from $REQUIREMENTS_FILE..."
-        python3 -m pip install -r "$REQUIREMENTS_FILE" --disable-pip-version-check
+        "$PYTHON3" -m pip install -r "$REQUIREMENTS_FILE" --disable-pip-version-check
 
         if [ $? -ne 0 ]; then
             echo "Failed to install requirements. Exiting."
@@ -39,7 +54,7 @@ else
     echo "Virtual environment not found. Creating..."
 
     # Create virtual environment (adjust for your Python version if needed)
-    python3 -m venv "$VENV_DIR"
+    "$PYTHON3" -m venv "$VENV_DIR"
 
     if [ $? -ne 0 ]; then
         echo "Failed to create virtual environment. Exiting."
@@ -51,7 +66,7 @@ else
         echo "Installing requirements from $REQUIREMENTS_FILE..."
         # Activate the virtual environment first before installing requirements.
         . "$VENV_DIR"/bin/activate 
-        python3 -m pip install -r "$REQUIREMENTS_FILE" --disable-pip-version-check
+        "$PYTHON3" -m pip install -r "$REQUIREMENTS_FILE" --disable-pip-version-check
 
         if [ $? -ne 0 ]; then
             echo "Failed to install requirements. Exiting."
@@ -60,9 +75,8 @@ else
     fi
 fi
 
-
-# Execute Python script with python3 (assuming it's within the venv)
-python3 ScriptMetricsMonitor.py
+# Execute Python script using the found Python 3 executable within the venv
+"$VENV_DIR"/bin/python AsyncScriptMetricsMonitor.py
 
 # Optionally, deactivate the virtual environment after the script finishes
 deactivate 

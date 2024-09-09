@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import json
 import psutil
 
@@ -21,4 +22,5 @@ def get_cpu_stats_json():
 
 if __name__ == "__main__":
     json_output = get_cpu_stats_json()
-    print(json_output)  # Print to console for AppDynamics
+    print(json_output, flush=True)  # Print to console for AppDynamics
+    sys.exit()

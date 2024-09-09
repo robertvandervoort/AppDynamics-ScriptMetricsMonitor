@@ -14,7 +14,8 @@ def main():
     #1. Read Config"""
     with open("config.yml", 'r') as f:
         config = yaml.safe_load(f)
-
+    global_metric_path = config['metric_path']
+    
     # 2. Initialize Metric Collector (Abstraction for AppD metric formatting)
     collector = AppDMetricCollector(config['metric_path'])
 
@@ -27,7 +28,8 @@ def main():
 
             if script_path.endswith('.py'):
                 if sys.version_info >= (3, 7):  # Python 3.7+
-                    result = subprocess.run(['python', script_path], capture_output=True, text=True, bufsize=0, check=False)
+                    result = subprocess.run(['python', script_path], capture_output=True, text=True, bufsize=0, check=False, )
+                    #print(f"python script {script_path} result: {result}")
                 else:
                     with contextlib.closing(subprocess.Popen(['python', script_path], stdout=subprocess.PIPE, bufsize=0)) as proc:
                         result = proc.stdout.read().decode()
@@ -68,7 +70,7 @@ def main():
                         metrics[mapping['metric_name']] = metrics.pop(mapping['original_name'])
 
             # 3.4 Collect Metrics
-            metric_path = job.get('metric_path', config.get('metric_path', "Custom Metrics|ScriptMetrics"))  # Fallback to global
+            metric_path = job.get('metric_path', config.get('metric_path', global_metric_path))  # Fallback to global
             collector.collect_metrics(metric_path, job['name'], metrics)
 
         except Exception as e:

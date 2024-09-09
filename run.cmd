@@ -54,7 +54,7 @@ if not exist "venv" (
 )
 
 :: Execute Python script
-%PYTHON_CMD% ScriptMetricsMonitor.py
+%PYTHON_CMD% AsyncScriptMetricsMonitor.py
 
 :: Optionally, deactivate the virtual environment after the script finishes
 call venv\Scripts\deactivate.bat
