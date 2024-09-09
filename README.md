@@ -99,7 +99,18 @@ jobs:
       }
    ```
 
-`metric_path:` Here it is again! This will override the global default above and is generally how I'd recommend you proceed. This sets the base path of your metrics. In my example above, these are really CPU metrics around context switches and if I wanted to see those in the CPU metrics I would set the path to `Hardware Resources` and the job name to `CPU`.
+`metric_path:` Here it is again! This will override the global default above and is generally how I'd recommend you proceed. This sets the base path of your metrics. In my example above, these are really CPU metrics around context switches and if I wanted to see those in the CPU metrics I would set the path to `Hardware Resources` and the job name to `CPU` like so:
+
+```
+  - name: "CPU"
+    script: "scripts/cpu-extended.py"
+    output_format: "json" # Options: json, xml, keyvalue, key=value
+    metric_path: "Hardware Resources"   # Job-specific metric path    
+    metrics: # Optional metric renaming
+      - original_name: "my_key"
+        metric_name: "CustomMetricName"
+```
+I wouldn't bother doing this with my sample script in its current state because it just returns the counter values as it stands and that's not really useful. I will work on that script more to provide the deltas and package it with this script once that's done.
 
 `metrics:` This section does metric renaming. This is a convenience factor for some and need for others. If you wrote your monitoring scripts of course you can go change the metric names in your code. If someone else wrote them or you have no access to change them, this comes in super handy.
    `- original_name: "my_key"` The metric name in the output of the script in question to match on.
