@@ -6,12 +6,12 @@ A machine agent extension that can run any number of monitoring scripts simultan
 
 ### All OS
 
-##Requirements
+## Requirements
 * Python >= 3.7. I have tried to include compatibility for earlier versions (sub 3.7 but still 3.x) but haven't tested extensively.
 * Ability to start / stop machine agents.
 * Permissions to change folder permissions if needed
 
-##Installation
+## Installation
 1. Shut down the machine agent on the server you're installing this on. If you can't shut the machine agent down for a few minutes (I get it! We're monitoring stuff!) then clone this script into another folder. Where it sits for testing isn't that important. Once you're happy with it, you can move it into the machine agent's monitors folder and restart the machine agent then.
 3. Clone this repo into your machine agent's "monitors" folder. Or elsewhere if you didn't shut the agent down as mentioned before.
 
