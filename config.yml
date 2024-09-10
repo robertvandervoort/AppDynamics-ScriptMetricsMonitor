@@ -18,10 +18,10 @@ jobs:
       - original_name: "my_key"
         metric_name: "CustomMetricName"
 
-  - name: "cpu-extended"
-    script: "scripts/cpu-extended.py"
+  - name: "CPU"
+    script: "scripts/monitor-context-switching.py"
     output_format: "json" # Options: json, xml, keyvalue, key=value
-    metric_path: "Custom Metrics"   # Job-specific metric path    
+    metric_path: "Hardware Resources"   # Job-specific metric path    
     metrics: # Optional metric renaming
       - original_name: "my_key"
         metric_name: "CustomMetricName"
