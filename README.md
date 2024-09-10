@@ -19,13 +19,14 @@ A machine agent extension that can run any number of monitoring scripts simultan
 
 3. Ensure that the user your machine agent runs under has full accesss to the directory tree that you cloned this project into.
 4. Enter the scripts subfolder and do a chmod +x on the .sh files within if you want to test this script using them.
-5. Edit the config.yml in the root folder of this script and uncomment the jobs you'd like to use as tests. I recommend uncommenting all just to make sure everything is working as designed.
+5. Edit the config.yml in the root folder of this script and uncomment the jobs you'd like to use as tests. I recommend uncommenting one of the testmetrics ones just to make sure everything is working as designed.
 6. From your shell, execute the `run.sh` script. This will create a Python virtual environment, install the requirements, and if successful, execute the script, which will in turn execute three test scripts and print the output.
 
 ### Windows
 
 3. Open a command prompt and enter the `AppDynamics-ScriptMetricsMonitor` folder that you cloned inside of your machine agent's monitors folder.
-4. If you want to use the test scripts in the scripts folder you'll need to change the config.yml. Uncomment the jobs and change the path and script name. They are set to .sh by default so switch those to .cmd back or forward slashes do not matter.
+4. If you want to use the test scripts in the scripts folder you'll need to change the config.yml. Uncomment the jobs and change the path and extension on the shell scripts. They are set to .sh by default so switch those to .cmd. Slash direction in the path does not matter. For the Python job "CPU" no changes are needed. 
+
 5. Execute the `run.cmd` file.
    
 At this point, if everything went well and you edited the config.yml to run all the tests, you should see this output:
@@ -35,10 +36,10 @@ Custom Metrics|testmetrics|Testmetric1,value=1
 Custom Metrics|testmetrics|Testmetric2,value=2
 Custom Metrics|testmetrics|Testmetric3,value=11234
 Custom Metrics|testmetrics|Testmetric4,value=2134432
-Custom Metrics|cpu-extended|ctx_switches,value=5460
-Custom Metrics|cpu-extended|interrupts,value=220045
-Custom Metrics|cpu-extended|soft_interrupts,value=4294967295
-Custom Metrics|cpu-extended|syscalls,value=192581
+name=Hardware Resources|CPU|ctx_switches, value=28279
+name=Hardware Resources|CPU|interrupts, value=17565
+name=Hardware Resources|CPU|syscalls, value=84752
+Custom Metrics|cpu-extended|soft_interrupts,value=4294
 ```
 
 If you didn't change the extensions on the first two jobs in the config.yml for Windows users, you'll see this:
@@ -48,16 +49,16 @@ If you didn't change the extensions on the first two jobs in the config.yml for 
 Error processing job 'testmetrics': [WinError 193] %1 is not a valid Win32 application
 Error processing job 'testmetrics': [WinError 193] %1 is not a valid Win32 application
 Custom Metrics|cpu-extended|ctx_switches,value=1638559682
-Custom Metrics|cpu-extended|interrupts,value=460127880
-Custom Metrics|cpu-extended|soft_interrupts,value=0
-Custom Metrics|cpu-extended|syscalls,value=402143940
+name=Hardware Resources|CPU|ctx_switches, value=28279
+name=Hardware Resources|CPU|interrupts, value=17565
+name=Hardware Resources|CPU|syscalls, value=84752
 ```
 
 The errors here are because the first two test scripts setup in the config.yml are bash shell scripts. If you want to test, I have included Windows .cmd equivalents, just modify the config.yml as stated above.
 
-If you dont see the "cpu-extended" (last four lines), then the Python sample monitor is not executing. This is likely due to a missing dependency or access issue. Make sure you installed the requirements in the prior steps. Since the run script creates a virtual environment, you generally should not run it as root in Linux.The test script requires the `psutil` library. This library will be common for Python-based monitoring scripts, so I made it a requirement in the venv.
+If you dont see the CPU metrics (last three or four lines), then the included Python CPU monitor is not executing. This is likely due to a missing dependency or access issue. Make sure you installed the requirements in the prior steps. Since the run script creates a virtual environment, you generally should not run it as root in Linux.It requires the `psutil` library. I made it a requirement to be installed in the requirement.txt because of this. If you are going to execute other Python based scripts, you can add their dependencies to the script's requirements.txt file if they are simple. For complex scripts that like to have their own venv, consider executing a batch file that does so instead of your Python script directly.
 
-If everything is good, edit the `config.yml` to meet your needs, removing the examples. Test the operation as above using the `run.sh` or `run.cmd` scripts. Do this before restarting your machine agent or the agent will create the test metrics under the hosts Custom MEtrics path which we don't want.
+If everything is good, edit the `config.yml` to meet your needs, removing the examples shell scripts. I suggest keeping the CPU script since it provides valuable metrics not available by default in AppDynamics. The CPU script works in Windows and Linux, and I have not tested on other operating systems. Test the operation as above using the `run.sh` or `run.cmd` scripts. Do this before restarting your machine agent or the agent will create the test metrics under the hosts Custom MEtrics path which we don't want.
 
 Once you're satisfied everything is as you want it to look output and path wise, you'll need to start the machine agent for the monitor to get picked up.
 
@@ -88,29 +89,19 @@ jobs:
 `script:` The path to the script you want to execute. In the example I'm using a relative path because the scripts sit in the monitoring scripts folder in a folder called scripts. You can put absolute paths here or move your mointoring scripts into the scripts folder. Whatever works. Generally I recommend keeping them in another location in the case where you might upgrade the machine agent and the folder gets wiped our, that would be unfortunate!
 
 `output_format:` Options are `json`, `xml`, `keyvalue`, `key=value`
-   json - we expect a single level of json currently. The output should be similar to the sample python monitoring script `cpu-extended.py`
+   json - we expect a single level of json currently. The output should be similar to the included python monitoring script `monitor-context-switching.py`
    
    ```   
-      {
-          "ctx_switches": 3529,
-          "interrupts": 176456,
-          "soft_interrupts": 2686068693,
-          "syscalls": 178295
-      }
-   ```
-
-`metric_path:` Here it is again! This will override the global default above and is generally how I'd recommend you proceed. This sets the base path of your metrics. In my example above, these are really CPU metrics around context switches and if I wanted to see those in the CPU metrics I would set the path to `Hardware Resources` and the job name to `CPU` like so:
-
-```
   - name: "CPU"
-    script: "scripts/cpu-extended.py"
+    script: "scripts/monitor-context-switching.py"
     output_format: "json" # Options: json, xml, keyvalue, key=value
     metric_path: "Hardware Resources"   # Job-specific metric path    
     metrics: # Optional metric renaming
       - original_name: "my_key"
         metric_name: "CustomMetricName"
-```
-I wouldn't bother doing this with my sample script in its current state because it just returns the counter values as it stands and that's not really useful. I will work on that script more to provide the deltas and package it with this script once that's done.
+   ```
+
+`metric_path:` Here it is again! This will override the global default specified in the top of the file and I'd recommend you always include it here int he job definitions. This sets the base path of your metrics. In my example above, context switching is really a CPU metric  and I want to see those in the metric browser alongside the built-in CPU metrics, so I would set the metric_path to `Hardware Resources` and the job name to `CPU` like I did in the above example.
 
 `metrics:` This section does metric renaming. This is a convenience factor for some and need for others. If you wrote your monitoring scripts of course you can go change the metric names in your code. If someone else wrote them or you have no access to change them, this comes in super handy.
    `- original_name: "my_key"` The metric name in the output of the script in question to match on.
