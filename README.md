@@ -19,8 +19,19 @@ A machine agent extension that can run any number of monitoring scripts simultan
 
 3. Ensure that the user your machine agent runs under has full accesss to the directory tree that you cloned this project into.
 4. Enter the scripts subfolder and do a chmod +x on the .sh files within if you want to test this script using them.
-5. Edit the config.yml in the root folder of this script and uncomment the jobs you'd like to use as tests. I recommend uncommenting one of the testmetrics ones just to make sure everything is working as designed.
+5. Edit the config.yml in the root folder of this script and uncomment the jobs you'd like to use as tests. I recommend uncommenting one of the testmetrics ones just to make sure everything is working as designed. The CPU job is the only active one by default. It's used to provide context switching and interrupt metrics as I'd advise you keep it, though I included it as an example.
 6. From your shell, execute the `run.sh` script. This will create a Python virtual environment, install the requirements, and if successful, execute the script, which will in turn execute three test scripts and print the output.
+
+```
+Custom Metrics|testmetrics|Testmetric1,value=1
+Custom Metrics|testmetrics|Testmetric2,value=2
+Custom Metrics|testmetrics|Testmetric3,value=11234
+Custom Metrics|testmetrics|Testmetric4,value=2134432
+name=Hardware Resources|CPU|ctx_switches, value=28279
+name=Hardware Resources|CPU|interrupts, value=17565
+name=Hardware Resources|CPU|syscalls, value=84752
+name=Hardware Resources|CPU|soft_interrupts,value=4294
+```
 
 ### Windows
 
@@ -48,7 +59,6 @@ If you didn't change the extensions on the first two jobs in the config.yml for 
 ```
 Error processing job 'testmetrics': [WinError 193] %1 is not a valid Win32 application
 Error processing job 'testmetrics': [WinError 193] %1 is not a valid Win32 application
-Custom Metrics|cpu-extended|ctx_switches,value=1638559682
 name=Hardware Resources|CPU|ctx_switches, value=28279
 name=Hardware Resources|CPU|interrupts, value=17565
 name=Hardware Resources|CPU|syscalls, value=84752
