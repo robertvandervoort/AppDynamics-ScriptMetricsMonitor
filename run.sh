@@ -4,8 +4,8 @@ VENV_DIR="venv"
 REQUIREMENTS_FILE="requirements.txt"
 
 # Function to find the Python 3 executable
-get_"$PYTHON3"() {
-    for executable in "$PYTHON3" python; do
+get_python3() {
+    for executable in python3 python; do
         if command -v "$executable" >/dev/null 2>&1 && "$executable" --version 2>&1 | grep -q "Python 3"; then
             echo "$executable"
             return
@@ -16,7 +16,7 @@ get_"$PYTHON3"() {
 }
 
 # Find the Python 3 executable
-"$PYTHON3"="$(get_"$PYTHON3")"
+PYTHON3="$(get_python3)"
 
 # Check if virtual environment exists
 if [ -d "$VENV_DIR" ]; then
@@ -80,3 +80,4 @@ fi
 
 # Optionally, deactivate the virtual environment after the script finishes
 deactivate 
+
