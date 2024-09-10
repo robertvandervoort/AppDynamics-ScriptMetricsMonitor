@@ -50,7 +50,6 @@ Custom Metrics|testmetrics|Testmetric4,value=2134432
 name=Hardware Resources|CPU|ctx_switches, value=28279
 name=Hardware Resources|CPU|interrupts, value=17565
 name=Hardware Resources|CPU|syscalls, value=84752
-Custom Metrics|cpu-extended|soft_interrupts,value=4294
 ```
 
 If you didn't change the extensions on the first two jobs in the config.yml for Windows users, you'll see this:
