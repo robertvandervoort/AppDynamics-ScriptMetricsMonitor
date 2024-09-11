@@ -2,21 +2,39 @@
 metric_path: "Custom Metrics" 
 
 jobs:
-#  - name: "testmetrics"
-#    script: "scripts/testmetrics.sh"
-#    output_format: "keyvalue" # Options: json, xml, keyvalue, key=value
-#    metric_path: "Custom Metrics"   # Job-specific metric path
-#    metrics: # Optional metric renaming
-#      - original_name: "my_key"
-#        metric_name: "CustomMetricName"
+  #For Windows use when using the Powershell version of this script 
+  #- name: "testmetrics"
+  #  script: "scripts\\testmetrics.cmd"
+  #  output_format: "keyvalue" # Options: json, xml, keyvalue, key=value
+  #  metric_path: "Custom Metrics"   # Job-specific metric path
+  #  metrics: # Optional metric renaming
+  #    - original_name: "my_key"
+  #      metric_name: "CustomMetricName"
 
-#  - name: "testmetrics"
-#    script: "scripts/testmetrics2.sh"
-#    output_format: "key=value" # Options: json, xml, keyvalue, key=value
-#    metric_path: "Custom Metrics"   # Job-specific metric path 
-#    metrics: # Optional metric renaming
-#      - original_name: "my_key"
-#        metric_name: "CustomMetricName"
+  - name: "testmetrics"
+    script: "scripts/testmetrics.sh"
+    output_format: "keyvalue" # Options: json, xml, keyvalue, key=value
+    metric_path: "Custom Metrics"   # Job-specific metric path
+    metrics: # Optional metric renaming
+      - original_name: "my_key"
+        metric_name: "CustomMetricName"
+
+  #For Windows use when using the Powershell version of this script 
+  #- name: "testmetrics"
+  #  script: "scripts\\testmetrics2.cmd"
+  #  output_format: "key=value" # Options: json, xml, keyvalue, key=value
+  #  metric_path: "Custom Metrics"   # Job-specific metric path 
+  #  metrics: # Optional metric renaming
+  #    - original_name: "my_key"
+  #      metric_name: "CustomMetricName"
+
+  - name: "testmetrics"
+    script: "scripts/testmetrics2.sh"
+    output_format: "key=value" # Options: json, xml, keyvalue, key=value
+    metric_path: "Custom Metrics"   # Job-specific metric path 
+    metrics: # Optional metric renaming
+      - original_name: "my_key"
+        metric_name: "CustomMetricName"
 
   - name: "CPU"
     script: "scripts/monitor-context-switching.py"
@@ -26,9 +44,11 @@ jobs:
       - original_name: "my_key"
         metric_name: "CustomMetricName"
 
-#  - name: "Job2"
-#    script: "scripts/script2.sh"
-#    output_format: "json"
-#    metrics: # Optional metric renaming
-#      - original_name: "my_key"
-#        metric_name: "CustomMetricName"
+  #For Windows use - a Powershell version and correct script path representation
+  #- name: "CPU"
+  #  script: "scripts\\monitor-context-switching.ps1"
+  #  output_format: "json" # Options: json, xml, keyvalue, key=value
+  #  metric_path: "Hardware Resources"   # Job-specific metric path    
+  #  metrics: # Optional metric renaming
+  #    - original_name: "my_key"
+  #      metric_name: "CustomMetricName"
